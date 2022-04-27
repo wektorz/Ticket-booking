@@ -2,16 +2,15 @@ package com.example.demo.model;
 
 public class SeatModel {
     private Long id;
-    private Long row;
+    private Long rowNumber;
     private Long positionInRow;
 
     SeatModel() {
-
     }
 
-    public SeatModel(Long id, Long row, Long positionInRow) {
+    public SeatModel(Long id, Long rowNumber, Long positionInRow) {
         this.id = id;
-        this.row = row;
+        this.rowNumber = rowNumber;
         this.positionInRow = positionInRow;
     }
 
@@ -24,11 +23,11 @@ public class SeatModel {
     }
 
     public Long getRow() {
-        return row;
+        return rowNumber;
     }
 
-    public void setRow(Long row) {
-        this.row = row;
+    public void setRow(Long rowNumber) {
+        this.rowNumber = rowNumber;
     }
 
     public Long getPositionInRow() {

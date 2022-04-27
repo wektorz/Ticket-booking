@@ -24,6 +24,10 @@ public class ReservationEntity {
         this.name = name;
         this.surname = surname;
         this.seatId = seatId;
+        if( !this.isValid() )
+        {
+            throw new IllegalArgumentException("Invalid name and surname");
+        }
     }
 
     public boolean isValid() {

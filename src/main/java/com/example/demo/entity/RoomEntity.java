@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "ROOMS")
+@Table(name = "ROOM")
 public class RoomEntity {
     @Id
     @GeneratedValue
@@ -17,8 +17,16 @@ public class RoomEntity {
             joinColumns =
             @JoinColumn(name = "ROOM_ID", referencedColumnName = "ID"),
             inverseJoinColumns =
-            @JoinColumn(name = "SEAT_ID", referencedColumnName = "ID")
+            @JoinColumn(name = "SEATS_ID", referencedColumnName = "ID")
     )
     private List<SeatEntity> seats;
 
+    public RoomEntity(Long number, List<SeatEntity> seats) {
+        this.number = number;
+        this.seats = seats;
+    }
+
+    public RoomEntity() {
+
+    }
 }

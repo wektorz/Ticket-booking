@@ -1,18 +1,52 @@
 package com.example.demo.controllers;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.demo.model.MovieModel;
+import com.example.demo.services.BookingService;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping(value ="/api")
+@RequestMapping(value ="/")
 public class BookingController {
 
-    @GetMapping
-    public Boolean test()
-    {
-        return true;
+    private final BookingService bookingService;
+
+    public BookingController(BookingService bookingService) {
+        this.bookingService = bookingService;
     }
+
+
+    //remove this from production !!!!
+    @PostMapping(value="/resetDB")
+    public void resetDB()
+    {
+        bookingService.initializeDemoDatabase();
+    }
+
+
+    @GetMapping(value = "/localDateTime")
+    public LocalDateTime localDateTime() {
+        return LocalDateTime.now();
+    }
+
+    @GetMapping(value = "/dateTime")
+    public Date currentTime() {
+        Date date = new Date();
+        return date;
+    }
+
+
+    @GetMapping(value = "/movies/{start}/{end}")
+    public List<MovieModel> moviesInTimeInterval(@PathVariable LocalDateTime start, @PathVariable LocalDateTime end)
+    {
+        return bookingService.moviesInTimeInterval(start,end);
+    }
+
+
+
+
 }
