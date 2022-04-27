@@ -9,7 +9,9 @@ import com.example.demo.mapper.MovieMapper;
 import com.example.demo.mapper.ReservationMapper;
 import com.example.demo.mapper.RoomMapper;
 import com.example.demo.mapper.SeatMapper;
+import com.example.demo.model.MovieDetails;
 import com.example.demo.model.MovieModel;
+import com.example.demo.model.SeatModel;
 import com.example.demo.repositories.MovieRepository;
 import com.example.demo.repositories.ReservationRepository;
 import com.example.demo.repositories.RoomRepository;
@@ -22,6 +24,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -108,28 +112,54 @@ public class BookingService {
                 new ReservationEntity("Michau", "Białek", seat5room2.getId())
         );
 
-        Date date1 = new Date(1651064400L);
-        Date date2 = new Date(1651072500L);
-        Date date3 = new Date(1651245300L);
-        Date date4 = new Date(1651256100L);
+
+        Date date1 = new Date(1651064400000L);
+        Date date2 = new Date(1651072500000L);
+        Date date3 = new Date(1651245300000L);
+        Date date4 = new Date(1651256100000L);
 
         MovieEntity movie1 = movieRepository.save(
-                new MovieEntity("Wyścig z czasem", date1, date2, room1, new ArrayList<ReservationEntity>(List.of(reservation1, reservation2)))
+                new MovieEntity("Wyścig z czasem", date1, date2, room1,
+                        new ArrayList<ReservationEntity>(List.of(reservation1, reservation2)))
         );
         MovieEntity movie2 = movieRepository.save(
-                new MovieEntity("Jaś Fasola", date3, date4, room1, new ArrayList<ReservationEntity>(List.of()))
+                new MovieEntity("Jaś Fasola", date3, date4, room1,
+                        new ArrayList<ReservationEntity>(List.of()))
         );
         MovieEntity movie3 = movieRepository.save(
-                new MovieEntity("Łasuch", date1, date2, room2, new ArrayList<ReservationEntity>(List.of(reservation3)))
+                new MovieEntity("Łasuch", date1, date2, room2,
+                        new ArrayList<ReservationEntity>(List.of(reservation3)))
         );
         MovieEntity movie4 = movieRepository.save(
-                new MovieEntity("Łasuch", date1, date2, room3, new ArrayList<ReservationEntity>(List.of()))
+                new MovieEntity("Łasuch", date1, date2, room3,
+                        new ArrayList<ReservationEntity>(List.of()))
         );
 
 
     }
 
-    public List<MovieModel> moviesInTimeInterval(LocalDateTime start, LocalDateTime end) {
-        return List.of();
+    public List<MovieModel> moviesInTimeInterval(Date start, Date end) {
+
+        List<MovieModel> list = movieMapper.toModel(
+                movieRepository.findByStartBeforeAndEndAfter(end, start))
+                .stream()
+                .map(Optional<MovieModel>::get)
+                .collect(Collectors.toList());
+
+        return list;
     }
+
+    public Optional<MovieDetails> movieDetails(Long id) {
+        MovieModel movie = movieMapper.toModel( movieRepository.findById(id).orElseThrow() ).orElseThrow();
+
+        List<SeatModel> allSeats = movie.getRoom().getSeats();
+
+        List<SeatModel> availableSeats =  allSeats.stream()
+                .filter(item -> !movie.getReservations().contains(item.getId()))
+                .collect(Collectors.toList());
+
+        return Optional.of(new MovieDetails(movie, availableSeats));
+    }
+
+
 }

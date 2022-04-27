@@ -11,12 +11,12 @@ public class MovieModel {
     private Date end;
 
     private RoomModel room;
-    private List<ReservationModel> reservations;
+    private List<Long> reservations;
 
     public MovieModel() {
     }
 
-    public MovieModel(Long id, String name, Date start, Date end, RoomModel room, List<ReservationModel> reservations) {
+    public MovieModel(Long id, String name, Date start, Date end, RoomModel room, List<Long> reservations) {
         this.id = id;
         this.name = name;
         this.start = start;
@@ -65,11 +65,11 @@ public class MovieModel {
         this.room = room;
     }
 
-    public List<ReservationModel> getReservations() {
+    public List<Long> getReservations() {
         return reservations;
     }
 
-    public void setReservations(List<ReservationModel> reservations) {
+    public void setReservations(List<Long> reservations) {
         this.reservations = reservations;
     }
 }

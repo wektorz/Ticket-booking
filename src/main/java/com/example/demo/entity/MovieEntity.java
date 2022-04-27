@@ -16,7 +16,7 @@ public class MovieEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private Date end;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne( cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private RoomEntity room;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
