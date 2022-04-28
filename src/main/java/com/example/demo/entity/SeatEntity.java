@@ -46,4 +46,5 @@ public class SeatEntity {
     public void setRowNumber(Long rowNumber) {
         this.rowNumber = rowNumber;
     }
+
 }

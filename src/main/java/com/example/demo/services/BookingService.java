@@ -9,22 +9,16 @@ import com.example.demo.mapper.MovieMapper;
 import com.example.demo.mapper.ReservationMapper;
 import com.example.demo.mapper.RoomMapper;
 import com.example.demo.mapper.SeatMapper;
-import com.example.demo.model.MovieDetails;
-import com.example.demo.model.MovieModel;
-import com.example.demo.model.SeatModel;
+import com.example.demo.model.*;
 import com.example.demo.repositories.MovieRepository;
 import com.example.demo.repositories.ReservationRepository;
 import com.example.demo.repositories.RoomRepository;
 import com.example.demo.repositories.SeatRepository;
-import org.springframework.context.annotation.Bean;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -141,7 +135,7 @@ public class BookingService {
     public List<MovieModel> moviesInTimeInterval(Date start, Date end) {
 
         List<MovieModel> list = movieMapper.toModel(
-                movieRepository.findByStartBeforeAndEndAfter(end, start))
+                        movieRepository.findByStartBeforeAndEndAfterOrderByStart(end, start))
                 .stream()
                 .map(Optional<MovieModel>::get)
                 .collect(Collectors.toList());
@@ -149,12 +143,13 @@ public class BookingService {
         return list;
     }
 
+
     public Optional<MovieDetails> movieDetails(Long id) {
-        MovieModel movie = movieMapper.toModel( movieRepository.findById(id).orElseThrow() ).orElseThrow();
+        MovieModel movie = movieMapper.toModel(movieRepository.findById(id).orElseThrow()).orElseThrow();
 
         List<SeatModel> allSeats = movie.getRoom().getSeats();
 
-        List<SeatModel> availableSeats =  allSeats.stream()
+        List<SeatModel> availableSeats = allSeats.stream()
                 .filter(item -> !movie.getReservations().contains(item.getId()))
                 .collect(Collectors.toList());
 
@@ -162,4 +157,96 @@ public class BookingService {
     }
 
 
+    public Optional<ReservationResponseModel> makeReservation(ReservationRequestModel request) {
+
+        if (!request.validIdTicketTypes()) {
+            throw new IllegalArgumentException("Invalid ticket types");
+        }
+
+        List<Long> sentSeatIds = request.getSeats().stream().map(Pair::getFirst).collect(Collectors.toList());
+        if (sentSeatIds.size() == 0) {
+            throw new IllegalArgumentException("0 seats selected");
+        }
+
+        MovieEntity movie = movieRepository.findById(request.getMovieId()).orElseThrow();
+
+
+        List<SeatEntity> availableSeats = movie.getRoom().getSeats().stream()
+                .filter(item -> !movie.getReservations().contains(item.getId()))
+                .collect(Collectors.toList());
+
+        List<Long> availableSeatIds = availableSeats.stream().map(SeatEntity::getId).collect(Collectors.toList());
+
+
+        // check if desired seats are empty
+        for (Pair<Long, String> seat : request.getSeats()) {
+            if (!availableSeatIds.contains(seat.getFirst())) {
+                throw new IllegalArgumentException("Seat is already taken");
+            }
+        }
+
+
+        List<Long> seatsFromReservation =
+                request.getSeats().stream()
+                        .map(Pair<Long, String>::getFirst)
+                        .collect(Collectors.toList());
+
+        // free after reservation
+        availableSeatIds.removeAll(seatsFromReservation);
+
+
+        //check if there exists a singular free seat between reserved seats
+
+        List<SeatEntity> sortedAllSeats = movie.getRoom().getSeats();
+        Collections.sort(sortedAllSeats, new SortSeatEntity());
+
+        //all free seats have null id, taken have not null
+        sortedAllSeats.stream().map(item -> {
+            if (availableSeatIds.contains(item.getId())) item.setId(null);
+            return item;
+        }).collect(Collectors.toList());
+
+
+        for (int i = 1; i < sortedAllSeats.size() - 1; i++) {
+            SeatEntity left = sortedAllSeats.get(i - 1);
+            SeatEntity center = sortedAllSeats.get(i);
+            SeatEntity right = sortedAllSeats.get(i + 1);
+
+            //empty seat between reserved on sorted list, need to check rowNumber and positionInRow
+            if (center.getId() == null && right.getId() != null && left.getId() != null) {
+                if (Objects.equals(left.getRowNumber(), center.getRowNumber())
+                        && Objects.equals(center.getRowNumber(), right.getRowNumber())) {
+                    if (left.getPositionInRow() + 1 == center.getPositionInRow()
+                            && right.getPositionInRow() - 1 == center.getPositionInRow()) {
+                        throw new IllegalArgumentException(" single leftover seat");
+                    }
+                }
+            }
+        }
+
+        //checks passed init entity and save
+        for (Long id : seatsFromReservation) {
+            ReservationEntity reservationEntity = reservationRepository.save(
+                    new ReservationEntity(request.getName(), request.getSurname(), id));
+            movie.getReservations().add(reservationEntity);
+        }
+        movieRepository.save(movie);
+
+
+        Double price = request.toPrice();
+        // I will suppose that reservation expiration time is week before movie screening.
+        Date expirationDate = new Date(movie.getStart().getTime() - 7 * 24 * 60 * 60 * 1000);
+
+        return Optional.of(new ReservationResponseModel(price, expirationDate));
+    }
+
+    private static class SortSeatEntity implements Comparator<SeatEntity> {
+
+        public int compare(SeatEntity a, SeatEntity b) {
+            return (int) (b.getRowNumber() - a.getRowNumber()
+                    + ((b.getRowNumber() - a.getRowNumber() == 0) ? b.getPositionInRow() - a.getPositionInRow() : 0));
+        }
+    }
 }
+
+

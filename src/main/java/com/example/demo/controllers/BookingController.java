@@ -2,12 +2,15 @@ package com.example.demo.controllers;
 
 import com.example.demo.model.MovieDetails;
 import com.example.demo.model.MovieModel;
+import com.example.demo.model.ReservationRequestModel;
+import com.example.demo.model.ReservationResponseModel;
 import com.example.demo.services.BookingService;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin
@@ -57,18 +60,21 @@ public class BookingController {
     // The system gives information regarding screening room and available seats.
 
     @GetMapping(value = "/movieDetails/{id}")
-    public MovieDetails movieDetails(@PathVariable Long id)
+    public Optional<MovieDetails> movieDetails(@PathVariable Long id)
     {
-        return bookingService.movieDetails(id).orElseThrow();
+        return bookingService.movieDetails(id);
     }
 
 
-    //TODO
     // The user chooses seats, and gives the name of the person doing the reservation
     //        (name and surname).
     // The system gives back the total amount to pay and reservation expiration time.
 
     // @PostMapping(value = "/makeReservation/")
+    public Optional<ReservationResponseModel> makeReservation(@RequestBody ReservationRequestModel request)
+    {
+        return bookingService.makeReservation(request);
+    }
 
 
 

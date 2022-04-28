@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface MovieRepository extends JpaRepository<MovieEntity, Long> {
 
     // movies within time interval
-    List<MovieEntity> findByStartBeforeAndEndAfter(
+    List<MovieEntity> findByStartBeforeAndEndAfterOrderByStart(
             Date startInterval,
             Date endInterval
             );
