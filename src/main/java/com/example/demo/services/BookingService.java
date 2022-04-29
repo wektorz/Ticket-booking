@@ -14,9 +14,9 @@ import com.example.demo.repositories.MovieRepository;
 import com.example.demo.repositories.ReservationRepository;
 import com.example.demo.repositories.RoomRepository;
 import com.example.demo.repositories.SeatRepository;
-import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.example.demo.core.Pair;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -50,30 +50,31 @@ public class BookingService {
 
     public void initializeDemoDatabase() {
 
-        reservationRepository.deleteAll();
-        seatRepository.deleteAll();
-        roomRepository.deleteAll();
         movieRepository.deleteAll();
+        reservationRepository.deleteAll();
+        roomRepository.deleteAll();
+        seatRepository.deleteAll();
 
-        SeatEntity seat1room1 = seatRepository.save(new SeatEntity(1L, 1L));
-        SeatEntity seat2room1 = seatRepository.save(new SeatEntity(1L, 2L));
-        SeatEntity seat3room1 = seatRepository.save(new SeatEntity(1L, 3L));
-        SeatEntity seat4room1 = seatRepository.save(new SeatEntity(2L, 1L));
-        SeatEntity seat5room1 = seatRepository.save(new SeatEntity(2L, 2L));
-        SeatEntity seat6room1 = seatRepository.save(new SeatEntity(2L, 3L));
-        SeatEntity seat7room1 = seatRepository.save(new SeatEntity(2L, 4L));
+        SeatEntity seat1room1 = seatRepository.save(new SeatEntity(1L, 1L, 1L));
+        SeatEntity seat2room1 = seatRepository.save(new SeatEntity(2L, 1L, 2L));
+        SeatEntity seat3room1 = seatRepository.save(new SeatEntity(3L, 1L, 3L));
+        SeatEntity seat4room1 = seatRepository.save(new SeatEntity(4L, 2L, 1L));
+        SeatEntity seat5room1 = seatRepository.save(new SeatEntity(5L, 2L, 2L));
+        SeatEntity seat6room1 = seatRepository.save(new SeatEntity(6L, 2L, 3L));
+        SeatEntity seat7room1 = seatRepository.save(new SeatEntity(7L, 2L, 4L));
 
-        SeatEntity seat1room2 = seatRepository.save(new SeatEntity(1L, 1L));
-        SeatEntity seat2room2 = seatRepository.save(new SeatEntity(1L, 2L));
-        SeatEntity seat3room2 = seatRepository.save(new SeatEntity(1L, 3L));
-        SeatEntity seat4room2 = seatRepository.save(new SeatEntity(2L, 1L));
-        SeatEntity seat5room2 = seatRepository.save(new SeatEntity(2L, 2L));
-        SeatEntity seat6room2 = seatRepository.save(new SeatEntity(2L, 3L));
-        SeatEntity seat7room2 = seatRepository.save(new SeatEntity(2L, 4L));
+        SeatEntity seat1room2 = seatRepository.save(new SeatEntity(8L, 1L, 1L));
+        SeatEntity seat2room2 = seatRepository.save(new SeatEntity(9L, 1L, 2L));
+        SeatEntity seat3room2 = seatRepository.save(new SeatEntity(10L, 1L, 3L));
+        SeatEntity seat4room2 = seatRepository.save(new SeatEntity(11L, 2L, 1L));
+        SeatEntity seat5room2 = seatRepository.save(new SeatEntity(12L, 2L, 2L));
+        SeatEntity seat6room2 = seatRepository.save(new SeatEntity(13L, 2L, 3L));
+        SeatEntity seat7room2 = seatRepository.save(new SeatEntity(14L, 2L, 4L));
 
 
         RoomEntity room1 = roomRepository.save(
                 new RoomEntity(
+                        15L,
                         1L,
                         new ArrayList<SeatEntity>(
                                 List.of(seat1room1, seat2room1, seat3room1, seat4room1, seat5room1, seat6room1, seat7room1)
@@ -83,6 +84,7 @@ public class BookingService {
 
         RoomEntity room2 = roomRepository.save(
                 new RoomEntity(
+                        16L,
                         2L,
                         new ArrayList<SeatEntity>(
                                 List.of(seat1room2, seat2room2, seat3room2, seat4room2, seat5room2, seat6room2, seat7room2)
@@ -91,19 +93,19 @@ public class BookingService {
         );
 
         // empty room without seats for tests
-        RoomEntity room3 = roomRepository.save(new RoomEntity(2L, new ArrayList<SeatEntity>(List.of())));
+        RoomEntity room3 = roomRepository.save(new RoomEntity(17L, 2L, new ArrayList<SeatEntity>(List.of())));
 
 
         ReservationEntity reservation1 = reservationRepository.save(
-                new ReservationEntity("Jan", "Tracz", seat1room1.getId())
+                new ReservationEntity(18L, "Jan", "Tracz", seat1room1.getId())
         );
 
         ReservationEntity reservation2 = reservationRepository.save(
-                new ReservationEntity("Anna", "Kowaluk-Łysoń", seat4room1.getId())
+                new ReservationEntity(19L, "Anna", "Kowaluk-Łysoń", seat4room1.getId())
         );
 
         ReservationEntity reservation3 = reservationRepository.save(
-                new ReservationEntity("Michau", "Białek", seat5room2.getId())
+                new ReservationEntity(20L, "Michau", "Białek", seat5room2.getId())
         );
 
 
@@ -113,19 +115,19 @@ public class BookingService {
         Date date4 = new Date(1651256100000L);
 
         MovieEntity movie1 = movieRepository.save(
-                new MovieEntity("Wyścig z czasem", date1, date2, room1,
+                new MovieEntity(21L, "Wyścig z czasem", date1, date2, room1,
                         new ArrayList<ReservationEntity>(List.of(reservation1, reservation2)))
         );
         MovieEntity movie2 = movieRepository.save(
-                new MovieEntity("Jaś Fasola", date3, date4, room1,
+                new MovieEntity(22L, "Jaś Fasola", date3, date4, room1,
                         new ArrayList<ReservationEntity>(List.of()))
         );
         MovieEntity movie3 = movieRepository.save(
-                new MovieEntity("Łasuch", date1, date2, room2,
+                new MovieEntity(23L, "Łasuch", date1, date2, room2,
                         new ArrayList<ReservationEntity>(List.of(reservation3)))
         );
         MovieEntity movie4 = movieRepository.save(
-                new MovieEntity("Łasuch", date1, date2, room3,
+                new MovieEntity(24L, "Łasuch", date1, date2, room3,
                         new ArrayList<ReservationEntity>(List.of()))
         );
 
@@ -157,6 +159,14 @@ public class BookingService {
     }
 
 
+    private List<SeatEntity> deepCopySeatList(List<SeatEntity> s) {
+        ArrayList<SeatEntity> result = new ArrayList<>();
+        for (SeatEntity seat : s) {
+            result.add(new SeatEntity(seat));
+        }
+        return result;
+    }
+
     public Optional<ReservationResponseModel> makeReservation(ReservationRequestModel request) {
 
         if (!request.validIdTicketTypes()) {
@@ -170,9 +180,11 @@ public class BookingService {
 
         MovieEntity movie = movieRepository.findById(request.getMovieId()).orElseThrow();
 
+        List<Long> reservedSeatIds = movie.getReservations().stream()
+                .map(ReservationEntity::getSeatId).collect(Collectors.toList());
 
         List<SeatEntity> availableSeats = movie.getRoom().getSeats().stream()
-                .filter(item -> !movie.getReservations().contains(item.getId()))
+                .filter(item -> !reservedSeatIds.contains(item.getId()))
                 .collect(Collectors.toList());
 
         List<Long> availableSeatIds = availableSeats.stream().map(SeatEntity::getId).collect(Collectors.toList());
@@ -197,7 +209,7 @@ public class BookingService {
 
         //check if there exists a singular free seat between reserved seats
 
-        List<SeatEntity> sortedAllSeats = movie.getRoom().getSeats();
+        List<SeatEntity> sortedAllSeats = deepCopySeatList(movie.getRoom().getSeats());
         Collections.sort(sortedAllSeats, new SortSeatEntity());
 
         //all free seats have null id, taken have not null

@@ -26,6 +26,12 @@ public class RoomEntity {
         this.seats = seats;
     }
 
+    public RoomEntity(Long id, Long number, List<SeatEntity> seats) {
+        this.id = id;
+        this.number = number;
+        this.seats = seats;
+    }
+
     public RoomEntity() {
 
     }

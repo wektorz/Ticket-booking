@@ -30,6 +30,17 @@ public class ReservationEntity {
         }
     }
 
+    public ReservationEntity(Long id,String name, String surname, Long seatId ) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.seatId = seatId;
+        if( !this.isValid() )
+        {
+            throw new IllegalArgumentException("Invalid name and surname");
+        }
+    }
+
     public boolean isValid() {
         if (name.length() < 3 || surname.length() < 3) return false;
 

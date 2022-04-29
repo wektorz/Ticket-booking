@@ -1,6 +1,6 @@
 package com.example.demo.model;
 
-import org.springframework.data.util.Pair;
+import com.example.demo.core.Pair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,10 +47,6 @@ public class ReservationRequestModel {
         }
 
         return  countMap.get("adult") * 25 + countMap.get("student") *18 + countMap.get("child") * 12.50;
-    }
-
-    public Long getId() {
-        return movieId;
     }
 
     public Long getMovieId() {

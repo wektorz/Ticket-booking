@@ -28,6 +28,9 @@ public class MovieEntity {
     )
     private List<ReservationEntity> reservations;
 
+    public MovieEntity() {
+
+    }
 
     public MovieEntity(String name, Date start, Date end, RoomEntity room, List<ReservationEntity> reservations) {
         this.name = name;
@@ -37,8 +40,14 @@ public class MovieEntity {
         this.reservations = reservations;
     }
 
-    public MovieEntity() {
 
+    public MovieEntity(Long id, String name, Date start, Date end, RoomEntity room, List<ReservationEntity> reservations) {
+        this.id = id;
+        this.name = name;
+        this.start = start;
+        this.end = end;
+        this.room = room;
+        this.reservations = reservations;
     }
 
     public Long getId() {
