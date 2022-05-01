@@ -72,4 +72,16 @@ public class MovieModel {
     public void setReservations(List<Long> reservations) {
         this.reservations = reservations;
     }
+
+    @Override
+    public String toString() {
+        return "MovieModel{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", start=" + start +
+                ", end=" + end +
+                ", room=" + room +
+                ", reservations=" + reservations +
+                '}';
+    }
 }

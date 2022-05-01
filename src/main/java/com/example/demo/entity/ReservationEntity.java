@@ -20,23 +20,21 @@ public class ReservationEntity {
     public ReservationEntity() {
     }
 
-    public ReservationEntity(String name, String surname, Long seatId ) {
+    public ReservationEntity(String name, String surname, Long seatId) {
         this.name = name;
         this.surname = surname;
         this.seatId = seatId;
-        if( !this.isValid() )
-        {
+        if (!this.isValid()) {
             throw new IllegalArgumentException("Invalid name and surname");
         }
     }
 
-    public ReservationEntity(Long id,String name, String surname, Long seatId ) {
+    public ReservationEntity(Long id, String name, String surname, Long seatId) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.seatId = seatId;
-        if( !this.isValid() )
-        {
+        if (!this.isValid()) {
             throw new IllegalArgumentException("Invalid name and surname");
         }
     }
@@ -72,5 +70,15 @@ public class ReservationEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "ReservationEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", seatId=" + seatId +
+                '}';
     }
 }

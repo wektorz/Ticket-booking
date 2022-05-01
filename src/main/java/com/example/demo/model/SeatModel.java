@@ -37,4 +37,13 @@ public class SeatModel {
     public void setPositionInRow(Long positionInRow) {
         this.positionInRow = positionInRow;
     }
+
+    @Override
+    public String toString() {
+        return "SeatModel{" +
+                "id=" + id +
+                ", rowNumber=" + rowNumber +
+                ", positionInRow=" + positionInRow +
+                '}';
+    }
 }

@@ -47,4 +47,14 @@ public class ReservationModel {
     public void setSeatId(Long seatId) {
         this.seatId = seatId;
     }
+
+    @Override
+    public String toString() {
+        return "ReservationModel{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", seatId=" + seatId +
+                '}';
+    }
 }

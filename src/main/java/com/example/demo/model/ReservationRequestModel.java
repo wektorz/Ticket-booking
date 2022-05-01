@@ -80,4 +80,14 @@ public class ReservationRequestModel {
     public void setSeats(List<Pair<Long, String>> seats) {
         this.seats = seats;
     }
+
+    @Override
+    public String toString() {
+        return "ReservationRequestModel{" +
+                "movieId=" + movieId +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", seats=" + seats +
+                '}';
+    }
 }

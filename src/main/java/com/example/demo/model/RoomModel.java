@@ -40,4 +40,13 @@ public class RoomModel {
     public void setSeats(List<SeatModel> seats) {
         this.seats = seats;
     }
+
+    @Override
+    public String toString() {
+        return "RoomModel{" +
+                "id=" + id +
+                ", number=" + number +
+                ", seats=" + seats +
+                '}';
+    }
 }

@@ -14,6 +14,8 @@ import com.example.demo.repositories.MovieRepository;
 import com.example.demo.repositories.ReservationRepository;
 import com.example.demo.repositories.RoomRepository;
 import com.example.demo.repositories.SeatRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.core.Pair;
@@ -24,6 +26,9 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class BookingService {
+
+    private final Logger logger = LoggerFactory.getLogger(BookingService.class);
+
     private final MovieRepository movieRepository;
     private final ReservationRepository reservationRepository;
     private final RoomRepository roomRepository;
@@ -189,14 +194,12 @@ public class BookingService {
 
         List<Long> availableSeatIds = availableSeats.stream().map(SeatEntity::getId).collect(Collectors.toList());
 
-
         // check if desired seats are empty
         for (Pair<Long, String> seat : request.getSeats()) {
             if (!availableSeatIds.contains(seat.getFirst())) {
                 throw new IllegalArgumentException("Seat is already taken");
             }
         }
-
 
         List<Long> seatsFromReservation =
                 request.getSeats().stream()
@@ -236,6 +239,12 @@ public class BookingService {
             }
         }
 
+        logger.debug("passed checks");
+        for (SeatEntity s : sortedAllSeats) {
+            logger.debug(s.toString());
+
+        }
+
         //checks passed init entity and save
         for (Long id : seatsFromReservation) {
             ReservationEntity reservationEntity = reservationRepository.save(
@@ -243,7 +252,6 @@ public class BookingService {
             movie.getReservations().add(reservationEntity);
         }
         movieRepository.save(movie);
-
 
         Double price = request.toPrice();
         // I will suppose that reservation expiration time is week before movie screening.
@@ -255,8 +263,8 @@ public class BookingService {
     private static class SortSeatEntity implements Comparator<SeatEntity> {
 
         public int compare(SeatEntity a, SeatEntity b) {
-            return (int) (b.getRowNumber() - a.getRowNumber()
-                    + ((b.getRowNumber() - a.getRowNumber() == 0) ? b.getPositionInRow() - a.getPositionInRow() : 0));
+            return (int) (a.getRowNumber() - b.getRowNumber()
+                    + ((a.getRowNumber() - b.getRowNumber() == 0) ? a.getPositionInRow() - b.getPositionInRow() : 0));
         }
     }
 }

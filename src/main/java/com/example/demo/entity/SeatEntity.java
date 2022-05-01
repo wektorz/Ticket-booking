@@ -29,8 +29,7 @@ public class SeatEntity {
         this.positionInRow = positionInRow;
     }
 
-    public SeatEntity(SeatEntity s)
-    {
+    public SeatEntity(SeatEntity s) {
         this.id = s.id;
         this.rowNumber = s.rowNumber;
         this.positionInRow = s.positionInRow;
@@ -60,4 +59,12 @@ public class SeatEntity {
         this.rowNumber = rowNumber;
     }
 
+    @Override
+    public String toString() {
+        return "SeatEntity{" +
+                "id=" + id +
+                ", rowNumber=" + rowNumber +
+                ", positionInRow=" + positionInRow +
+                '}';
+    }
 }

@@ -29,4 +29,12 @@ public class ReservationResponseModel {
     public void setExpireTime(Date expireTime) {
         this.expireTime = expireTime;
     }
+
+    @Override
+    public String toString() {
+        return "ReservationResponseModel{" +
+                "price=" + price +
+                ", expireTime=" + expireTime +
+                '}';
+    }
 }

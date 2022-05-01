@@ -59,4 +59,13 @@ public class RoomEntity {
     public void setSeats(List<SeatEntity> seats) {
         this.seats = seats;
     }
+
+    @Override
+    public String toString() {
+        return "RoomEntity{" +
+                "id=" + id +
+                ", number=" + number +
+                ", seats=" + seats +
+                '}';
+    }
 }

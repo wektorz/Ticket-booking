@@ -7,13 +7,13 @@ public class MovieDetails {
     private MovieModel movie;
     private List<SeatModel> availableSeats;
 
-    public MovieDetails(){
+    public MovieDetails() {
     }
 
 
     public MovieDetails(MovieModel movie, List<SeatModel> availableSeats) {
-        this.movie=movie;
-        this.availableSeats= availableSeats;
+        this.movie = movie;
+        this.availableSeats = availableSeats;
     }
 
     public MovieModel getMovie() {
@@ -30,5 +30,13 @@ public class MovieDetails {
 
     public void setAvailableSeats(List<SeatModel> availableSeats) {
         this.availableSeats = availableSeats;
+    }
+
+    @Override
+    public String toString() {
+        return "MovieDetails{" +
+                "movie=" + movie +
+                ", availableSeats=" + availableSeats +
+                '}';
     }
 }

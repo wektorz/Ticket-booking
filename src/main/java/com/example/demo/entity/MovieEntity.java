@@ -16,7 +16,7 @@ public class MovieEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private Date end;
 
-    @ManyToOne( cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private RoomEntity room;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
@@ -96,5 +96,17 @@ public class MovieEntity {
 
     public void setReservations(List<ReservationEntity> reservations) {
         this.reservations = reservations;
+    }
+
+    @Override
+    public String toString() {
+        return "MovieEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", start=" + start +
+                ", end=" + end +
+                ", room=" + room +
+                ", reservations=" + reservations +
+                '}';
     }
 }
