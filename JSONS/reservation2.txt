@@ -1,0 +1,15 @@
+{
+    "movieId": 22,
+    "name": "Kamil",
+    "surname": "Arański-Gruchała",
+    "seats": [
+        {
+            "first": 1,
+            "second": "adult"
+        },
+        {
+            "first": 3,
+            "second": "adult"
+        }
+    ]
+}

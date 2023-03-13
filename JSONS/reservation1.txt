@@ -1,0 +1,11 @@
+{
+    "movieId": 21,
+    "name": "Kamil",
+    "surname": "Arański",
+    "seats": [
+        {
+            "first": 2,
+            "second": "adult"
+        }
+    ]
+}
